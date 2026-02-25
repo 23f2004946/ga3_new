@@ -1,4 +1,5 @@
 from playwright.sync_api import sync_playwright
+import re
 
 urls = [
 
@@ -32,25 +33,23 @@ def scrape():
 
             page.goto(url)
 
-            # ⭐ WAIT FOR TABLE TO LOAD
-            page.wait_for_selector("table")
+            # wait JS execution
+            page.wait_for_load_state("networkidle")
 
-            # Extra wait for JS rendering
-            page.wait_for_timeout(3000)
+            page.wait_for_timeout(4000)
 
-            # Get ALL table cell texts
-            cells = page.locator("table td").all_inner_texts()
+            # get whole page text
+            text = page.inner_text("body")
 
-            for text in cells:
+            # extract numbers
+            numbers = re.findall(r"\d+(?:\.\d+)?", text)
 
-                try:
-                    total += float(text.strip())
-                except:
-                    pass
+            for num in numbers:
+
+                total += float(num)
 
         browser.close()
 
-    # ⭐ REQUIRED FORMAT
     print(f"TOTAL_SUM={int(total)}")
 
 
