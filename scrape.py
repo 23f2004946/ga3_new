@@ -16,7 +16,6 @@ urls = [
 
 ]
 
-
 def scrape():
 
     total = 0
@@ -33,26 +32,21 @@ def scrape():
 
             page.goto(url)
 
-            # wait JS execution
-            page.wait_for_load_state("networkidle")
+            # JS render wait
+            page.wait_for_timeout(5000)
 
-            page.wait_for_timeout(4000)
-
-            # get whole page text
             text = page.inner_text("body")
 
-            # extract numbers
             numbers = re.findall(r"\d+(?:\.\d+)?", text)
 
-            for num in numbers:
-
-                total += float(num)
+            for n in numbers:
+                total += float(n)
 
         browser.close()
 
     print("========== FINAL ANSWER ==========")
     print(f"TOTAL_SUM={int(total)}")
-    print("=================================="))
+    print("==================================")
 
 
 if __name__ == "__main__":
