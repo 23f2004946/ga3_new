@@ -22,7 +22,7 @@ def scrape():
 
     with sync_playwright() as p:
 
-        browser = p.chromium.launch()
+        browser = p.chromium.launch(headless=True)
 
         page = browser.new_page()
 
@@ -32,24 +32,25 @@ def scrape():
 
             page.goto(url)
 
-            page.wait_for_load_state("networkidle")
+            # ⭐ WAIT FOR TABLE TO LOAD
+            page.wait_for_selector("table")
 
-            cells = page.locator("table td")
+            # Extra wait for JS rendering
+            page.wait_for_timeout(3000)
 
-            count = cells.count()
+            # Get ALL table cell texts
+            cells = page.locator("table td").all_inner_texts()
 
-            for i in range(count):
-
-                text = cells.nth(i).inner_text().strip()
+            for text in cells:
 
                 try:
-                    total += float(text)
+                    total += float(text.strip())
                 except:
                     pass
 
         browser.close()
 
-    # ⭐ IMPORTANT PRINT FORMAT
+    # ⭐ REQUIRED FORMAT
     print(f"TOTAL_SUM={int(total)}")
 
 
