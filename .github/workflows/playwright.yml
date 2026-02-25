@@ -1,10 +1,11 @@
 name: DataDash QA
 
 on:
-  push:
   workflow_dispatch:
+  push:
 
 jobs:
+
   scrape:
 
     runs-on: ubuntu-latest
@@ -21,10 +22,9 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          pip install -r requirements.txt
+          pip install playwright
           playwright install chromium
 
-      # ⭐ REQUIRED STEP (EMAIL MUST BE HERE)
+      # ⭐ REQUIRED EMAIL STEP
       - name: Run QA Script - 23f2004946@ds.study.iitm.ac.in
-        run: |
-          python scrape.py
+        run: python scrape.py
