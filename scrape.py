@@ -50,7 +50,9 @@ def scrape():
 
         browser.close()
 
+    print("========== FINAL ANSWER ==========")
     print(f"TOTAL_SUM={int(total)}")
+    print("=================================="))
 
 
 if __name__ == "__main__":
