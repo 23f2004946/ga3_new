@@ -1,6 +1,5 @@
 from playwright.sync_api import sync_playwright
 
-# Replace with actual URLs given in assignment
 urls = [
 
 "https://sanand0.github.io/tdsdata/seed39.html",
@@ -33,7 +32,7 @@ def scrape():
 
             page.goto(url)
 
-            page.wait_for_timeout(2000)
+            page.wait_for_load_state("networkidle")
 
             cells = page.locator("table td")
 
@@ -43,13 +42,15 @@ def scrape():
 
                 text = cells.nth(i).inner_text().strip()
 
-                if text.replace(".", "", 1).isdigit():
-
+                try:
                     total += float(text)
+                except:
+                    pass
 
         browser.close()
 
-    print("TOTAL SUM =", total)
+    # ⭐ IMPORTANT PRINT FORMAT
+    print(f"TOTAL_SUM={int(total)}")
 
 
 if __name__ == "__main__":
